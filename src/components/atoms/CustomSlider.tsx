@@ -14,8 +14,6 @@ export const CustomSlider: FC<CustomSliderProps> = ({ max }) => {
     setInputValue(newValue as number);
   };
 
-  console.log(max, "slider");
-
   return (
     <Row>
       <Col span={12}>

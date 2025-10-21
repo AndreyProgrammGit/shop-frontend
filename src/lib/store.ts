@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { authBaseApi } from "./api/auth/authBaseApi";
 import { baseApi } from "./api/baseApi";
 import AuthSlice from "./slices/AuthSlice";
+import FilterSlice from "./slices/FilterSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -9,6 +10,7 @@ export const makeStore = () => {
       [authBaseApi.reducerPath]: authBaseApi.reducer,
       [baseApi.reducerPath]: baseApi.reducer,
       auth: AuthSlice,
+      filters: FilterSlice,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()

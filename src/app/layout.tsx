@@ -1,7 +1,7 @@
-import "@ant-design/v5-patch-for-react-19";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import StoreProvider from "./StoreProvider";
+import { ConfigProvider, theme } from "antd";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,7 +30,20 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         style={{ height: "100vh" }}
       >
-        <StoreProvider>{children}</StoreProvider>
+        <StoreProvider>
+          <ConfigProvider
+            theme={{
+              algorithm: theme.defaultAlgorithm,
+              token: {
+                colorPrimary: "#f59e0b",
+                colorPrimaryHover: "#fbbf24",
+                controlOutline: "rgba(245, 158, 11, 0.3)",
+              },
+            }}
+          >
+            {children}
+          </ConfigProvider>
+        </StoreProvider>
       </body>
     </html>
   );
