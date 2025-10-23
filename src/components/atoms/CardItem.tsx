@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { CardItemProps } from "./types/CardItemProps";
 import { Card } from "antd";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const { Meta } = Card;
 
@@ -14,8 +15,10 @@ export const CardItem: FC<CardItemProps> = ({
   price,
   productId,
 }) => {
+  const router = useRouter();
   return (
     <Card
+      onClick={() => router.push(`/product/${productId}`)}
       hoverable
       style={{ width: 350 }}
       cover={

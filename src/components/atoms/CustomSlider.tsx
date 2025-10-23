@@ -2,9 +2,14 @@ import React, { FC, useEffect, useState } from "react";
 import type { InputNumberProps } from "antd";
 import { Col, InputNumber, Row, Slider } from "antd";
 import { CustomSliderProps } from "./types/CustomSliderProps";
+import { useAppDispatch } from "@/lib/hooks";
+import { useDebounce } from "@/hooks/useDebounce";
+import { setPrice } from "@/lib/slices/FilterSlice";
 
 export const CustomSlider: FC<CustomSliderProps> = ({ max }) => {
   const [inputValue, setInputValue] = useState(0);
+  const debounceValue = useDebounce(inputValue, 1000);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setInputValue(max);
@@ -13,6 +18,10 @@ export const CustomSlider: FC<CustomSliderProps> = ({ max }) => {
   const onChange: InputNumberProps["onChange"] = (newValue) => {
     setInputValue(newValue as number);
   };
+
+  useEffect(() => {
+    dispatch(setPrice(debounceValue));
+  }, [debounceValue]);
 
   return (
     <Row>

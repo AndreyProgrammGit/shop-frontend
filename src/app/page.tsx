@@ -1,11 +1,11 @@
 "use client";
-import { ProductLayout } from "@/components/organisms/ProductLayout";
+import { ProductsLayout } from "@/components/organisms/ProductsLayout";
 import { MainTemplate } from "@/components/templates/MainTemplate";
 
 export default function Home() {
   return (
     <MainTemplate>
-      <ProductLayout />
+      <ProductsLayout />
     </MainTemplate>
   );
 }

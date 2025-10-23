@@ -17,6 +17,7 @@ export const LoginForm = () => {
   const handleSubmit = async (data: { email: string; password: string }) => {
     try {
       const response = await login(data);
+      console.log(response);
       localStorage.setItem("accessToken", response.data?.accessToken!);
       localStorage.setItem("refreshToken", response.data?.refreshToken!);
     } catch {
@@ -25,14 +26,14 @@ export const LoginForm = () => {
   };
 
   useEffect(() => {
-    if (isSuccess) redirect("/home");
+    if (isSuccess) redirect("/");
   }, [isSuccess]);
 
   return (
     <Flex vertical align="center" className="w-[500px]">
-      <Typography.Title>Login Form</Typography.Title>
+      <Typography.Title>Login to Shop</Typography.Title>
       <CustomForm onFinish={handleSubmit}>
-        {isError && (
+        {/* {isError && (
           <Alert
             message="Error"
             description={(error as any).data.message}
@@ -62,10 +63,11 @@ export const LoginForm = () => {
             prefix=""
             className={classes}
           />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item label={null}>
           <CustomButton
-            className="hover:border-orange-500! hover:text-orange-500!"
+            block
+            className="hover:border-orange-500! hover:text-orange-500! h-[50px]!"
             htmlType="submit"
             loading={isLoading}
             type="default"

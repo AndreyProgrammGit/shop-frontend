@@ -30,8 +30,8 @@ export const authApi = authBaseApi.injectEndpoints({
       query: (body) => ({
         url: "/auth/login",
         method: "POST",
-        body,
-        credentials: "include",
+        // body,
+        // credentials: "include",
       }),
     }),
     register: builder.mutation<TRegisterResponse, TRegisterRequest>({

@@ -3,8 +3,7 @@ import type { BaseQueryFn } from "@reduxjs/toolkit/query";
 import { logout } from "../slices/AuthSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:1488",
-  credentials: "include",
+  baseUrl: "https://dth0gn02-1488.euw.devtunnels.ms/",
   prepareHeaders: (headers) => {
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("accessToken");
@@ -13,6 +12,7 @@ const baseQuery = fetchBaseQuery({
     return headers;
   },
 });
+
 const baseQueryWithReauth: BaseQueryFn<any, unknown, unknown> = async (
   args,
   api,
@@ -21,25 +21,25 @@ const baseQueryWithReauth: BaseQueryFn<any, unknown, unknown> = async (
   let result = await baseQuery(args, api, extraOptions);
 
   if (result.error && result.error.status === 401) {
-    try {
-      const refreshResult = await baseQuery(
-        { url: "/auth/refresh", method: "POST", credentials: "include" },
-        api,
-        extraOptions
-      );
+    //   try {
+    //     const refreshResult = await baseQuery(
+    //       { url: "/auth/refresh", method: "POST", credentials: "include" },
+    //       api,
+    //       extraOptions
+    //     );
 
-      if (refreshResult.data) {
-        const { accessToken } = refreshResult.data as { accessToken: string };
-        console.log(accessToken);
-        localStorage.setItem("accessToken", accessToken);
+    //     if (refreshResult.data) {
+    //       const { accessToken } = refreshResult.data as { accessToken: string };
+    //       console.log(accessToken);
+    //       localStorage.setItem("accessToken", accessToken);
 
-        result = await baseQuery(args, api, extraOptions);
-      } else {
-        api.dispatch(logout());
-      }
-    } catch {
-      api.dispatch(logout());
-    }
+    //       result = await baseQuery(args, api, extraOptions);
+    //     } else {
+    api.dispatch(logout());
+    //     }
+    //   } catch {
+    //     api.dispatch(logout());
+    //   }
   }
 
   return result;

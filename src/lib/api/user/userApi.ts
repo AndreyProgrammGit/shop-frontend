@@ -8,6 +8,13 @@ export type TUserInfoResponse = {
   city: string | undefined | null;
 };
 
+export type TTelegramUserInfoResponse = {
+  telegramId: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+};
+
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     userInfo: builder.query<TUserInfoResponse, void>({
@@ -16,7 +23,13 @@ export const userApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    telegramUserInfo: builder.query<TTelegramUserInfoResponse, void>({
+      query: () => ({
+        url: "/telegram-user/",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
-export const { useUserInfoQuery } = userApi;
+export const { useUserInfoQuery, useTelegramUserInfoQuery } = userApi;

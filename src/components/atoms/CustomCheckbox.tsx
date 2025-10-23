@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Checkbox } from "antd";
 import type { CheckboxProps } from "antd";
-import { CustomCheckboxProps } from "./CustomCheckboxProps";
+import { CustomCheckboxProps } from "./types/CustomCheckboxProps";
 
 export const CustomCheckbox: FC<CustomCheckboxProps> = ({
   name,

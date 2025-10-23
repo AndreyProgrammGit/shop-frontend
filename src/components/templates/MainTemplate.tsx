@@ -25,6 +25,7 @@ export const MainTemplate = ({ children }: { children: ReactNode }) => {
           width: 1620,
           margin: "0 auto",
           padding: "1rem",
+          minHeight: "100vh",
         }}
       >
         <Header />

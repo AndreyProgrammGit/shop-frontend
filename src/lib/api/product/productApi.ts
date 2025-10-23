@@ -19,7 +19,7 @@ type TProductRequest = {
 
 export const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    productAll: builder.query<TProductResponse[], TProductRequest>({
+    productsAll: builder.query<TProductResponse[], TProductRequest>({
       query: (queryParams) => {
         const params = new URLSearchParams();
 
@@ -41,7 +41,27 @@ export const productApi = baseApi.injectEndpoints({
         };
       },
     }),
+    product: builder.query<TProductResponse, string>({
+      query: (id) => ({
+        url: `/products/product/${id}`,
+        method: "GET",
+      }),
+    }),
+    searchProduct: builder.query<TProductResponse, string>({
+      query: (searchString) => {
+        const params = new URLSearchParams();
+
+        params.append("search", searchString);
+
+        console.log(params);
+
+        return {
+          url: `products/search?${params.toString()}`,
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
-export const { useProductAllQuery } = productApi;
+export const { useProductsAllQuery, useProductQuery } = productApi;
