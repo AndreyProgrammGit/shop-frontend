@@ -7,20 +7,22 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { setPrice } from "@/lib/slices/FilterSlice";
 
 export const CustomSlider: FC<CustomSliderProps> = ({ max }) => {
-  const [inputValue, setInputValue] = useState(0);
+  const [inputValue, setInputValue] = useState<number | null>(null);
   const debounceValue = useDebounce(inputValue, 1000);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    setInputValue(max);
-  }, [max]);
+  // useEffect(() => {
+  //   setInputValue(max);
+  // }, [max]);
 
   const onChange: InputNumberProps["onChange"] = (newValue) => {
     setInputValue(newValue as number);
   };
 
   useEffect(() => {
-    dispatch(setPrice(debounceValue));
+    if (inputValue !== null) {
+      dispatch(setPrice(debounceValue));
+    }
   }, [debounceValue]);
 
   return (
@@ -28,7 +30,7 @@ export const CustomSlider: FC<CustomSliderProps> = ({ max }) => {
       <Col span={12}>
         <Slider
           min={0}
-          max={max}
+          max={1500}
           onChange={onChange}
           value={typeof inputValue === "number" ? inputValue : 0}
           step={50}
@@ -37,7 +39,7 @@ export const CustomSlider: FC<CustomSliderProps> = ({ max }) => {
       <Col span={4}>
         <InputNumber
           min={0}
-          max={max}
+          max={1500}
           style={{ margin: "0 16px" }}
           step={50}
           value={inputValue}

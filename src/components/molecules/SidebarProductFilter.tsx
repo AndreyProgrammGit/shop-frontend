@@ -7,6 +7,7 @@ import { CustomCollapse } from "../atoms/CustomCollapse";
 export const SidebarProductFilter: FC<SidebarProductFilterProps> = ({
   data,
 }) => {
+  console.log(data);
   return (
     <Flex>
       <ul className="flex flex-col gap-4">

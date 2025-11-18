@@ -1,13 +1,23 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { SidebarProductFilter } from "../molecules/SidebarProductFilter";
 import { ProductList } from "../molecules/ProductList";
 import { useProductsAllQuery } from "@/lib/api/product/productApi";
-import { useAppSelector } from "@/lib/hooks";
-import { Skeleton, Spin } from "antd";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { Skeleton } from "antd";
+import { setNext, setPrev } from "@/lib/slices/FilterSlice";
+import { CustomButton } from "../atoms/CustomButton";
+import { CustomDropdownSort } from "../atoms/CustomDropdownSort";
 
 export const ProductsLayout = () => {
   const selector = useAppSelector((state) => state.filters);
-  const { data: products, isLoading } = useProductsAllQuery(selector);
+  const dispatch = useAppDispatch();
+
+  const {
+    data: products,
+    isFetching,
+    isLoading,
+  } = useProductsAllQuery(selector);
 
   const [aggregateData, setAggregateData] = useState<{
     brands: string[];
@@ -20,24 +30,30 @@ export const ProductsLayout = () => {
   });
 
   useEffect(() => {
-    if (products && !isLoading) {
-      const brands = products
-        .map((product) => product.brand)
-        .filter((brand, index, array) => array.indexOf(brand) === index);
-
-      const categories = products
-        .map((product) => product.category)
-        .filter((category, index, array) => array.indexOf(category) === index);
-
-      const maxPrice = Math.max(...products.map((product) => product.price));
-
+    console.log(products);
+    if (products?.products.length && !isLoading) {
+      const brands = products?.brands;
+      const categories = products?.categories;
+      const maxPrice = Math.max(...products?.products.map((p) => p.price));
       setAggregateData({ brands, categories, maxPrice });
     }
   }, [isLoading]);
 
+  const isPrevDisabled = selector.offset <= 0;
+  const isNextDisabled = !(products?.total! >= selector.offset);
+  console.log(isNextDisabled);
+
+  const handleLoadMore = () => {
+    dispatch(setNext({ offset: 9 }));
+  };
+
+  const handleLoadLess = () => {
+    dispatch(setPrev({ offset: 9 }));
+  };
+
   return (
     <div className="flex gap-6">
-      <aside className="w-1/10">
+      <aside className="w-1/8 sticky top-0 left-0">
         {!isLoading ? (
           <SidebarProductFilter data={aggregateData} />
         ) : (
@@ -48,11 +64,21 @@ export const ProductsLayout = () => {
           </div>
         )}
       </aside>
-      <main className="flex-1">
-        {!isLoading ? (
-          <ProductList products={products ?? []} />
-        ) : (
-          <Spin size="large" />
+      <main className="flex-1 flex flex-col items-center">
+        <div className="w-full flex justify-end mb-6">
+          <CustomDropdownSort />
+        </div>
+        <ProductList products={products ?? { products: [] }} />
+
+        {!isFetching && (
+          <div className="flex justify-between w-full mt-5">
+            <CustomButton disabled={isPrevDisabled} onClick={handleLoadLess}>
+              Previously Products
+            </CustomButton>
+            <CustomButton disabled={isNextDisabled} onClick={handleLoadMore}>
+              Next Products
+            </CustomButton>
+          </div>
         )}
       </main>
     </div>

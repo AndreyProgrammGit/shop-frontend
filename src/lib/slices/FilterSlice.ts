@@ -4,15 +4,21 @@ import { productApi } from "../api/product/productApi";
 export interface FilterState {
   brands: string[];
   categories: string[];
-  price: number;
+  price: number | null;
+  limit: number;
   loading: boolean;
+  offset: number;
+  sort: "asc" | "desc" | null;
 }
 
 const initialState: FilterState = {
   brands: [],
   categories: [],
-  price: 0,
+  price: null,
   loading: false,
+  limit: 9,
+  offset: 0,
+  sort: null,
 };
 
 const FilterSlice = createSlice({
@@ -31,6 +37,18 @@ const FilterSlice = createSlice({
 
     setPrice: (state, action) => {
       state.price = action.payload;
+    },
+
+    setNext: (state, action) => {
+      state.limit = 9;
+      state.offset += action.payload.offset;
+    },
+    setPrev: (state, action) => {
+      state.limit = 9;
+      state.offset -= action.payload.offset;
+    },
+    setSort: (state, action) => {
+      state.sort = action.payload;
     },
   },
   extraReducers(builder) {
@@ -56,5 +74,6 @@ const FilterSlice = createSlice({
   },
 });
 
-export const { setFilters, setPrice } = FilterSlice.actions;
+export const { setFilters, setPrice, setNext, setPrev, setSort } =
+  FilterSlice.actions;
 export default FilterSlice.reducer;

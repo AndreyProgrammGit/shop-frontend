@@ -1,6 +1,9 @@
 import React, { FC } from "react";
 import { ProductLayoutProps } from "./types/ProductLayoutProps";
-import { useProductQuery } from "@/lib/api/product/productApi";
+import {
+  TProductResponse,
+  useProductQuery,
+} from "@/lib/api/product/productApi";
 import {
   Skeleton,
   Flex,
@@ -10,6 +13,7 @@ import {
   Tag,
   Divider,
   Descriptions,
+  notification,
 } from "antd";
 import Image from "next/image";
 import { ShoppingCartOutlined, HeartOutlined } from "@ant-design/icons";
@@ -17,8 +21,41 @@ import { CustomButton } from "../atoms/CustomButton";
 
 const { Title, Paragraph } = Typography;
 
+type localStorageProduct = {
+  id: string;
+};
+
 export const ProductLayout: FC<ProductLayoutProps> = ({ id }) => {
   const { data: product, isLoading } = useProductQuery(id);
+
+  const handleAddToCart = (product: TProductResponse) => {
+    const existProducts: localStorageProduct[] = JSON.parse(
+      localStorage.getItem("products")!
+    );
+
+    const validateProduct = existProducts
+      ? existProducts.filter((item) => item.id === product.productId)
+      : [];
+
+    if (existProducts && validateProduct.length > 0) {
+      return notification.error({
+        message: "This product already exist in your cart",
+      });
+    }
+
+    if (existProducts && validateProduct.length === 0) {
+      notification.success({ message: "Successfully add to cart" });
+      return localStorage.setItem(
+        "products",
+        JSON.stringify([...existProducts, { productIds: product.productId }])
+      );
+    }
+
+    localStorage.setItem(
+      "products",
+      JSON.stringify([{ productIds: product.productId }])
+    );
+  };
 
   if (isLoading) {
     return (
@@ -70,8 +107,9 @@ export const ProductLayout: FC<ProductLayoutProps> = ({ id }) => {
                 size="large"
                 icon={<ShoppingCartOutlined />}
                 className="!bg-amber-500 hover:!bg-amber-600"
+                onClick={() => handleAddToCart(product!)}
               >
-                Add to curt
+                Add to cart
               </CustomButton>
 
               <CustomButton

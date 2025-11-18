@@ -10,7 +10,7 @@ export const ProductList: FC<ProductListProps> = ({ products }) => {
   return (
     <Row gutter={[0, 24]} align="middle" justify="center">
       {!loading ? (
-        products?.map((item) => (
+        products.products?.map((item) => (
           <Col key={item.productId} span={8} className="!flex !justify-center">
             <CardItem
               name={item.name}

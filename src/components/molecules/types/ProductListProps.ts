@@ -9,5 +9,7 @@ type Product = {
 };
 
 export interface ProductListProps {
-  products: Product[];
+  products: {
+    products: Product[];
+  };
 }

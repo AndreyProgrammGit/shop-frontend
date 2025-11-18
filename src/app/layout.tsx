@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import StoreProvider from "./StoreProvider";
 import { ConfigProvider, theme } from "antd";
 import "./globals.css";
+import { TonProvider } from "@/components/templates/TonProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,7 +42,7 @@ export default function RootLayout({
               },
             }}
           >
-            {children}
+            <TonProvider>{children}</TonProvider>
           </ConfigProvider>
         </StoreProvider>
       </body>
